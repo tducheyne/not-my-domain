@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NotMyDomain.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -68,6 +69,11 @@ namespace NotMyDomain.Interface
                 if (_selectedOptionIndex < 0) return;
 
                 _chosenOptionIndex = _selectedOptionIndex;
+            }
+
+            if (consoleKey == ConsoleKey.Escape)
+            {
+                throw new UserEscapeException();
             }
 
             if (_selectedOptionIndex >= _options.Count) _selectedOptionIndex = 0;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NotMyDomain.Exceptions;
 using NotMyDomain.Interface;
 using NotMyDomain.Models;
 using System;
@@ -37,6 +38,10 @@ namespace NotMyDomain
 
                 var arguments = $"/k \"@echo off & cls & runas /user:{account.Username} /netonly \"{application.ExecutablePath}\" & exit\"";
                 var process = Process.Start("cmd.exe", arguments);
+            }
+            catch (UserEscapeException)
+            {
+                _hostApplicationLifetime.StopApplication();
             }
             catch (Exception exc)
             {
