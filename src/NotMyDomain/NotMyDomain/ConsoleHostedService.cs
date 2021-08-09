@@ -34,6 +34,8 @@ namespace NotMyDomain
             try
             {
                 var application = _applicationSelector.Execute();
+                Console.Clear();
+
                 var account = _accountSelector.Execute();
 
                 var arguments = $"/k \"@echo off & cls & runas /user:{account.Username} /netonly \"{application.ExecutablePath}\" & exit\"";
@@ -49,7 +51,13 @@ namespace NotMyDomain
             }
             finally
             {
-                _hostApplicationLifetime.StopApplication();
+                bool isAlreadyStopping = _hostApplicationLifetime.ApplicationStopped.IsCancellationRequested
+                    || _hostApplicationLifetime.ApplicationStopping.IsCancellationRequested;
+
+                if (!isAlreadyStopping)
+                {
+                    _hostApplicationLifetime.StopApplication();
+                }
             }
 
             return Task.CompletedTask;

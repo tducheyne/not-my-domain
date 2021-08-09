@@ -9,7 +9,7 @@ namespace NotMyDomain.Interface
     {
         private readonly string _title;
         private readonly IList<T> _options;
-        private readonly Func<T, string> _optionName;
+        private readonly Func<T, string> _optionNameSelector;
 
         private int _selectedOptionIndex;
         private int? _chosenOptionIndex;
@@ -17,7 +17,7 @@ namespace NotMyDomain.Interface
         protected ConsoleOptionSelector(string title, IEnumerable<T> options, Func<T, string> optionName)
         {
             _title = title;
-            _optionName = optionName;
+            _optionNameSelector = optionName;
             _options = options.ToList();
         }
 
@@ -51,7 +51,7 @@ namespace NotMyDomain.Interface
             {
                 var option = _options[i];
                 var checkbox = _selectedOptionIndex == i ? checkedCheckbox : uncheckedCheckbox;
-                var optionName = _optionName(option);
+                var optionName = _optionNameSelector(option);
 
                 Console.WriteLine($"{checkbox} {optionName}");
             }
